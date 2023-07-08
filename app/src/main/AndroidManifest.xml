@@ -32,7 +32,8 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait">
+            android:screenOrientation="fullSensor"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -50,8 +51,9 @@
 
         <activity
             android:name=".SendLogActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="stateHidden"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.hijacker.SendLogActivity"/>
                 <category android:name="android.intent.category.DEFAULT"/>

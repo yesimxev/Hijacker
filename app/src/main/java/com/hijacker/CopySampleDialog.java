@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,7 +68,7 @@ public class CopySampleDialog extends DialogFragment {
                         copy(prefix + " " + reaver_dir + " -i " + iface + " -vv -b 00:11:22:33:44:55 --channel 6 -L -E -S", getView());
                         break;
                     case 5:
-                        copy("chroot " + chroot_dir + " /bin/bash -c \'" + get_chroot_env(getActivity()) + "reaver -i " + iface + " -vv -b 00:11:22:33:44:55 --channel 6 -L -E -S\'", getView());
+                        copy("chroot " + chroot_dir + " /bin/bash -c '" + get_chroot_env(getActivity()) + "reaver -i " + iface + " -vv -b 00:11:22:33:44:55 --channel 6 -L -E -S'", getView());
                         break;
                 }
                 dismissAllowingStateLoss();

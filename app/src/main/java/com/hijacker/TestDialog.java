@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -64,7 +65,7 @@ public class TestDialog extends DialogFragment {
     final Runnable runnable = new Runnable(){
         @Override
         public void run(){
-            final boolean results[] = {false, false, false, false, false};
+            final boolean[] results = {false, false, false, false, false};
             final String cmdMonMode = enable_monMode;
             final String cmdAirodump = "su -c " + prefix + " " + airodump_dir + " " + iface;
             final String cmdAireplay = "su -c " + prefix + " " + aireplay_dir + " --deauth 0 -a 11:22:33:44:55:66 " + iface;

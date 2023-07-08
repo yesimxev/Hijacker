@@ -44,7 +44,7 @@ import java.io.Reader;
  */
 public class BoundedBufferedReader extends Reader {
 
-    private Reader in;
+    private final Reader in;
 
     /**
      * The characters that can be read and refilled in bulk. We maintain three
@@ -295,7 +295,7 @@ public class BoundedBufferedReader extends Reader {
                 // If there are chars in the buffer, grab those first.
                 int available = end - pos;
                 if (available > 0) {
-                    int count = available >= outstanding ? outstanding : available;
+                    int count = Math.min(available, outstanding);
                     System.arraycopy(buf, pos, buffer, offset, count);
                     pos += count;
                     offset += count;
@@ -518,7 +518,7 @@ public class BoundedBufferedReader extends Reader {
                     break;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return i;
     }

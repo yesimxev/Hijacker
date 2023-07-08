@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +17,7 @@ package com.hijacker;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 /*
     This service is used only for persistence. Android will kill
     the app unless it has a service running. It starts when the app is started

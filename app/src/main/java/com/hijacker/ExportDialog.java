@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -115,7 +116,7 @@ public class ExportDialog extends DialogFragment{
         filenameView.setError(null);
         String filename = filenameView.getText().toString();
         if(filename.equals("")){
-            filenameView.setError(getString(R.string.field_required));
+            //filenameView.setError(getString(R.string.field_required));
             filenameView.requestFocus();
             return;
         }

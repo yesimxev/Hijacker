@@ -166,25 +166,8 @@
         You need to use a custom firmware (bcmon, Nexmon) so that your wireless adapter can be used in Monitor Mode. External adapters can also be used.
         You can configure your interface\'s name in Settings. This app requires root privileges to run the tools.
         \nYou can install the Nexmon firmware now, or you can go to the Home Screen.</string>
-    <string name="install_firmware">Install Nexmon</string>
 
-    <!-- InstallFirmwareDialog -->
-    <string name="firmware_location">Firmware Location:</string>
-    <string name="device_chipset">Device Chipset:</string>
-    <string name="util_location_text">Management Utility:</string>
-    <string name="firmware_not_found">Firmware file not found</string>
-    <string name="none_found">None found</string>
-    <string name="backup_exists">A backup already exists</string>
-    <string name="backup_created">Backup created</string>
-    <string name="installed_firm_util">Installed firmware and utility</string>
-    <string name="create_backup">Create Backup</string>
-    <string name="error_extracting_firmware">An error occurred while extracting the firmware</string>
-    <string name="error_extracting_utility">An error occurred while extracting nexutil</string>
-    <string name="error_reading_mounts">Can\'t read /proc/mounts to determine system mounting point</string>
-    <string name="error_remounting_system">Can\'t remount / or /system as read-write</string>
     <string name="field_required">This field is required</string>
-    <string name="restore">Restore</string>
-    <string name="restored">Backup restored</string>
 
     <!-- IsolatedFragment (xml) -->
     <string name="crack">Crack</string>
@@ -209,7 +192,7 @@
     <string name="bin_not_created">Directory \'bin\' could not be created</string>
     <string name="lib_not_created">Directory \'lib\' could not be created</string>
     <string name="not_arm">The architecture of this device is not ARM. The included tools cannot be used.
-        You will have to install the tools manually in a PATH accessible directory: aircrack-ng suite, busybox, mdk3, reaver, wireless-tools and libfakeioctl.so, and adjust the prefix for the library.</string>
+        You will have to install the tools manually in a PATH accessible directory: aircrack-ng suite, busybox, mdk3, reaver, and wireless-tools, and adjust the prefix for the library.</string>
         <!-- Notification -->
         <string name="notification_title">Hijacker is running in the background</string>
         <string name="watchdog_notif_title">Hijacker watchdog detected a problem</string>
@@ -269,9 +252,9 @@
     <string name="chroot_notfound">Chroot directory not found</string>
     <string name="kali_notfound">bootkali_init not found</string>
     <string name="chroot_both_notfound">Chroot directory and bootkali_init not found</string>
-    <string name="chroot_warning">!!!!!!  Kali chroot doesn\'t currently support monitor mode through the internal wireless interface.
-        If you are on NetHunterOS it may work, otherwise you have to use an external adapter.
-        The command \"source monstart-nh\" will be executed in chroot. !!!!!!</string>
+    <string name="chroot_warning">!!!!!!  Only a few devices has support for monitor mode through the internal wireless interface.
+        If your device is running q Qualcomm chipset, monitor mode is supported. Otherwise you have to use an external adapter.
+        !!!!!!</string>
     <string name="pin_delay">PIN delay</string>
     <string name="locked_delay">Locked Delay</string>
     <string name="custom_chroot_cmd_illegal">The custom command can\'t contain the character \'</string>
@@ -318,23 +301,22 @@
     <string name="no_permissions">No external storage or internet permission</string>
 
     <!-- Default Preferences -->
-    <string name="iface" translatable="false">wlan0</string>
-    <string name="prefix" translatable="false">LD_PRELOAD=/vendor/lib/libfakeioctl.so</string>
-    <string name="chroot_dir" translatable="false">/data/local/nhsystem/kali-armhf</string>
-    <string name="monstart" translatable="false">false</string>
-    <string name="enable_monMode" translatable="false">nexutil -m true</string>
-    <string name="disable_monMode" translatable="false">nexutil -m false</string>
-    <string name="enable_on_airodump" translatable="false">true</string>
+    <string name="iface" translatable="false">wlan1</string>
+    <string name="prefix" translatable="false"/>
+    <string name="chroot_dir" translatable="false">/data/local/nhsystem/kali-arm64</string>
+    <string name="enable_monMode" translatable="false"/>
+    <string name="disable_monMode" translatable="false"/>
+    <string name="enable_on_airodump" translatable="false">false</string>
     <string name="deauthWait" translatable="false">20</string>
     <string name="show_notif" translatable="false">true</string>
     <string name="show_details" translatable="false">true</string>
-    <string name="airOnStartup" translatable="false">true</string>
+    <string name="airOnStartup" translatable="false">false</string>
     <string name="debug" translatable="false">true</string>
     <string name="always_cap" translatable="false">false</string>
     <string name="cont_on_fail" translatable="false">false</string>
-    <string name="watchdog" translatable="false">true</string>
+    <string name="watchdog" translatable="false">false</string>
     <string name="target_deauth" translatable="false">false</string>
-    <string name="auto_update" translatable="false">true</string>
+    <string name="auto_update" translatable="false">false</string>
     <string name="band" translatable="false">1</string>
     <string name="show_client_count" translatable="false">true</string>
 
@@ -397,8 +379,6 @@
 
     <!-- Tools -->
     <string name="tools">Tools</string>
-    <string name="install_nexmon_title">Install Nexmon</string>
-    <string name="install_nexmon_sum">Install the Nexmon driver and its management utility</string>
 
     <string name="test_title">Test tools</string>
     <string name="test_sum">Run all the tools to make sure that the settings are correct. Any running tasks will be stopped.</string>
@@ -411,9 +391,6 @@
     <string name="chroot_title">Chroot directory</string>
     <string name="chroot_desc">Directory where a kali chroot is installed by NetHunter (required only for pixie-dust attack with reaver)</string>
 
-    <string name="monstart_title">source monstart-nh</string>
-    <string name="monstart_sum">Run source monstart-nh command when running reaver in NetHunter chroot (only in NetHunterOS)</string>
-
     <string name="custom_chroot_cmd_title">Custom command</string>
     <string name="custom_chroot_cmd_sum">Command to be ran in chroot when starting reaver</string>
     <string name="custom_chroot_cmd_desc">This command will be ran in the chroot environment before starting reaver.
@@ -422,7 +399,7 @@
         Don\'t use the character \'.</string>
 
     <string name="cont_on_fail_title">Ignore failed commands</string>
-    <string name="cont_on_fail_sum">Continue running in chroot in case monstart-nh or the custom command fail</string>
+    <string name="cont_on_fail_sum">Continue running in chroot in case the custom command fail</string>
 
     <!-- Other -->
     <string name="other">Other</string>

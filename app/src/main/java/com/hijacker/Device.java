@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +28,8 @@ import static com.hijacker.MainActivity.getManuf;
 import static com.hijacker.MainActivity.sort;
 import static com.hijacker.MainActivity.toSort;
 
+import androidx.annotation.NonNull;
+
 abstract class Device{
     String mac, manuf, alias;
     int pwr;
@@ -41,6 +44,7 @@ abstract class Device{
         this.alias = aliases.get(this.mac);
         if(sort!=SORT_NOSORT) toSort = true;
     }
+    @NonNull
     public abstract String toString();
     abstract String getExported();
     abstract void showInfo(FragmentManager fragmentManager);

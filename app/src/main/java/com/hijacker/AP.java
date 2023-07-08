@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -207,7 +208,7 @@ class AP extends Device{
             if(debug) Log.d("HIJACKER/AP", "Cracking WEP");
             Airodump.reset();
             Airodump.setAP(this);
-            Airodump.setForWEP(true);
+            Airodump.setForWEP();
             Airodump.start();
             if(essid!=null) startAireplayWEP(this);
             progress.setIndeterminate(true);
@@ -217,7 +218,7 @@ class AP extends Device{
             if(debug) Log.d("HIJACKER/AP", "Cracking WPA/WPA2");
             Airodump.reset();
             Airodump.setAP(this);
-            Airodump.setForWPA(true);
+            Airodump.setForWPA();
             Airodump.start();
             startAireplay(this.mac);
             wpa_thread = new Thread(wpa_runnable);
@@ -230,7 +231,7 @@ class AP extends Device{
 
         ReaverFragment.ap = this;
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.replace(R.id.fragment1, activity.reaverFragment.setAutostart(true));
+        ft.replace(R.id.fragment1, activity.reaverFragment.setAutostart());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.addToBackStack(null);
         ft.commitAllowingStateLoss();

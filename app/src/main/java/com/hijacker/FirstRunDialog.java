@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,8 +27,10 @@ import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
+/*
 import static com.hijacker.MainActivity.isArchValid;
 import static com.hijacker.MainActivity.background;
+
 
 public class FirstRunDialog extends DialogFragment {
     @Override
@@ -77,6 +80,7 @@ public class FirstRunDialog extends DialogFragment {
             });
         }
     }
+
     @Override
     public void onDismiss(DialogInterface dialogInterface){
         super.onDismiss(dialogInterface);
@@ -85,7 +89,6 @@ public class FirstRunDialog extends DialogFragment {
             notify();
         }
     }
-
     public void _wait(){
         try{
             synchronized(this){
@@ -94,3 +97,5 @@ public class FirstRunDialog extends DialogFragment {
         }catch(InterruptedException ignored){}
     }
 }
+
+ */

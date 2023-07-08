@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@ package com.hijacker;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-//Code from here (modified): http://stackoverflow.com/questions/601503/how-do-i-obtain-crash-data-from-my-android-application
+
 
 import android.Manifest;
 import android.content.Intent;
@@ -65,7 +66,7 @@ public class SendLogActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setFinishOnTouchOutside(false);
         setContentView(R.layout.activity_send_log);
 
@@ -76,6 +77,7 @@ public class SendLogActivity extends AppCompatActivity{
 
         busybox = getFilesDir().getAbsolutePath() + "/bin/busybox";
         stackTrace = getIntent().getStringExtra("exception");
+        assert stackTrace != null;
         Log.e("HIJACKER/SendLog", stackTrace);
 
         //Load device info
@@ -95,14 +97,15 @@ public class SendLogActivity extends AppCompatActivity{
         new SetupTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        boolean writeGranted = grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED;
-        if(shell==null){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean writeGranted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        if (shell == null) {
             progressBar.setVisibility(View.GONE);
             console.setText(getString(R.string.cant_open_shell));
-        }else if(writeGranted){
+        } else if (writeGranted) {
             new ReportTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }else{
+        } else {
             progressBar.setVisibility(View.GONE);
             console.setText(getString(R.string.cant_create_report));
         }
@@ -170,7 +173,7 @@ public class SendLogActivity extends AppCompatActivity{
     public void onUseEmail(View v){
         Intent intent = new Intent (Intent.ACTION_SEND);
         intent.setType("plain/text");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"droid.hijacker@gmail.com"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"christian@aircrack-ng.org"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Hijacker bug report");
         Uri attachment = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", report);
         intent.putExtra(Intent.EXTRA_STREAM, attachment);

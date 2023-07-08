@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +66,6 @@ import static com.hijacker.MainActivity.iface;
 import static com.hijacker.MainActivity.last_action;
 import static com.hijacker.MainActivity.last_reaver;
 import static com.hijacker.MainActivity.mFragmentManager;
-import static com.hijacker.MainActivity.monstart;
 import static com.hijacker.MainActivity.notification;
 import static com.hijacker.MainActivity.prefix;
 import static com.hijacker.MainActivity.progress;
@@ -215,8 +215,8 @@ public class ReaverFragment extends Fragment{
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
-    ReaverFragment setAutostart(boolean autostart){
-        this.autostart = autostart;
+    ReaverFragment setAutostart(){
+        this.autostart = true;
         return this;
     }
     static boolean isRunning(){
@@ -327,15 +327,11 @@ public class ReaverFragment extends Fragment{
                 "HOME=/root",
                 "LOGNAME=root",
                 "SHLVL=1",
-                "YOU_KNOW_WHAT=THIS_IS_KALI_LINUX_NETHUNER_FROM_JAVA_BINKY"
+                "YOU_KNOW_WHAT=THIS_IS_KALI_LINUX_NETHUTNER_FROM_JAVA_BINKY"
         };
         StringBuilder ENV_OUT = new StringBuilder();
         for (String aENV : ENV) {
             ENV_OUT.append("export ").append(aENV).append(" && ");
-        }
-        if(monstart){
-            ENV_OUT.append("source monstart-nh");
-            ENV_OUT.append(cont_on_fail ? "; " : " && ");
         }
         if(!custom_chroot_cmd.equals("")){
             if(custom_chroot_cmd.contains("'") && activity!=null){
@@ -406,7 +402,7 @@ public class ReaverFragment extends Fragment{
                         Runtime.getRuntime().exec("su -c " + bootkali_init_bin);       //Make sure kali has booted
                     }
                     args += " -K 1";
-                    cmd = "chroot " + MainActivity.chroot_dir + " /bin/bash -c \'" + get_chroot_env(getActivity()) + "reaver " + args + "\'";
+                    cmd = "chroot " + MainActivity.chroot_dir + " /bin/bash -c '" + get_chroot_env(getActivity()) + "reaver " + args + "'";
                     publishProgress("\nRunning: " + cmd);
                     ProcessBuilder pb = new ProcessBuilder("su");
                     pb.redirectErrorStream(true);

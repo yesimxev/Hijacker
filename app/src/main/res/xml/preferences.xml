@@ -112,10 +112,6 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/tools">
         <Preference
-            android:title="@string/install_nexmon_title"
-            android:summary="@string/install_nexmon_sum"
-            android:key="install_nexmon" />
-        <Preference
             android:title="@string/test_title"
             android:summary="@string/test_sum"
             android:key="test_tools" />
@@ -141,11 +137,6 @@
             android:dialogMessage="@string/custom_chroot_cmd_desc"
             android:dialogTitle="@string/custom_chroot_cmd_title"
             android:key="custom_chroot_cmd"/>
-        <SwitchPreference
-            android:defaultValue="@string/monstart"
-            android:title="@string/monstart_title"
-            android:summary="@string/monstart_sum"
-            android:key="monstart"/>
 
         <SwitchPreference
             android:defaultValue="@string/cont_on_fail"

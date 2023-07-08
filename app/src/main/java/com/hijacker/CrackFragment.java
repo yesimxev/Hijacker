@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -185,7 +186,7 @@ public class CrackFragment extends Fragment{
             long latest = 0;
             File result = null;
 
-            File files[] = new File(cap_path).listFiles(new FilenameFilter(){
+            File[] files = new File(cap_path).listFiles(new FilenameFilter(){
                 @Override
                 public boolean accept(File file, String s){
                     return s.startsWith("handshake-") && s.endsWith(".cap");
@@ -211,7 +212,7 @@ public class CrackFragment extends Fragment{
             long latest = 0;
             File result = null;
 
-            File files[] = new File(wl_path).listFiles();
+            File[] files = new File(wl_path).listFiles();
 
             if(files!=null){    //Only if the directory is deleted while the app is running, apparently it happens
                 for(File f : files){

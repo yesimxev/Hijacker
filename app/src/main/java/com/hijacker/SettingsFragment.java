@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -84,7 +85,6 @@ public class SettingsFragment extends PreferenceFragment {
                         pref_edit.putBoolean("debug", Boolean.parseBoolean(getString(R.string.debug)));
                         pref_edit.putBoolean("always_cap", Boolean.parseBoolean(getString(R.string.always_cap)));
                         pref_edit.putString("chroot_dir", getString(R.string.chroot_dir));
-                        pref_edit.putBoolean("monstart", Boolean.parseBoolean(getString(R.string.monstart)));
                         pref_edit.putString("custom_chroot_cmd", "");
                         pref_edit.putBoolean("cont_on_fail", Boolean.parseBoolean(getString(R.string.cont_on_fail)));
                         pref_edit.putBoolean("watchdog", Boolean.parseBoolean(getString(R.string.watchdog)));
@@ -103,13 +103,6 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new CopySampleDialog().show(mFragmentManager, "CopySampleDialog");
-                return false;
-            }
-        });
-        findPreference("install_nexmon").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new InstallFirmwareDialog().show(mFragmentManager, "InstallFirmwareDialog");
                 return false;
             }
         });

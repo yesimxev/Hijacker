@@ -2,6 +2,7 @@ package com.hijacker;
 
 /*
     Copyright (C) 2019  Christos Kyriakopoulos
+    Copyright (C) 2022-2023  Christian <kimocoder> B.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,6 +84,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -95,7 +97,7 @@ import static com.hijacker.MDKFragment.bf;
 import static com.hijacker.Shell.getFreeShell;
 import static com.hijacker.Shell.runOne;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     static final String NETHUNTER_BOOTKALI_BASH = "/data/data/com.offsec.nethunter/files/scripts/bootkali_bash";
     static final String RELEASES_LINK = "https://api.github.com/repos/chrisk44/Hijacker/releases";
     static final String WORDLISTS_LINK = "https://api.github.com/repos/chrisk44/Hijacker/contents/wordlists";
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity{
     static final int BAND_2 = 1, BAND_5 = 2, BAND_BOTH = 3;
     static final int FRAGMENT_AIRODUMP = R.id.nav_airodump, FRAGMENT_MDK = R.id.nav_mdk3, FRAGMENT_CRACK = R.id.nav_crack,
             FRAGMENT_REAVER = R.id.nav_reaver, FRAGMENT_CUSTOM = R.id.nav_custom_actions, FRAGMENT_SETTINGS = R.id.nav_settings;
-    static final int PROCESS_AIRODUMP=0, PROCESS_AIREPLAY=1, PROCESS_MDK_BF=2, PROCESS_MDK_DOS=3, PROCESS_AIRCRACK=4, PROCESS_REAVER=5;
+    static final int PROCESS_AIRODUMP=0, PROCESS_AIREPLAY=1, PROCESS_MDK_BF=2, PROCESS_MDK_DOS=3, PROCESS_AIRCRACK=4, PROCESS_REAVER = 5;
     static final int SORT_NOSORT = 0, SORT_ESSID = 1, SORT_BEACONS_FRAMES = 2, SORT_DATA_FRAMES = 3, SORT_PWR = 4;
     static final int CHROOT_FOUND = 0, CHROOT_BIN_MISSING = 1, CHROOT_DIR_MISSING = 2, CHROOT_BOTH_MISSING = 3;
     //State variables
@@ -156,11 +158,11 @@ public class MainActivity extends AppCompatActivity{
     static ActionBar actionBar;
     static String bootkali_init_bin = "bootkali_init";
     //Preferences - Defaults are in strings.xml
-    static String iface, prefix, airodump_dir, aireplay_dir, aircrack_dir, mdk3bf_dir, mdk3dos_dir, reaver_dir, chroot_dir,
+    static String iface, prefix, airodump_dir, aireplay_dir, aircrack_dir, mdk3bf_dir, mdk3dos_dir, reaver_dir, bully_dir, airmon_dir, airodump_oui_dir, airolib_dir, hcxdumptool_dir, cowpatty_dir, genpmk_dir, hcxhashtool_dir, hcxpcapngtool_dir, john_dir, johnconf_dir, iwspy_dir, iwgetid_dir, hcxpsktool_dir, manuf_dir, pixiewps_dir, pixiewrapper_dir, whoismac_dir, wlancap2wpasec_dir, chroot_dir,
             enable_monMode, disable_monMode, custom_chroot_cmd;
     static int deauthWait, band;
     static boolean show_notif, show_details, airOnStartup, debug, show_client_count,
-            monstart, always_cap, cont_on_fail, watchdog, target_deauth, enable_on_airodump, update_on_startup;
+            always_cap, cont_on_fail, watchdog, target_deauth, enable_on_airodump, update_on_startup;
 
     WatchdogTask watchdogTask;
 
@@ -174,7 +176,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
             @Override
-            public void uncaughtException(Thread thread, Throwable throwable){
+            public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable){
                 throwable.printStackTrace();
                 StringBuilder stackTrace = new StringBuilder();
                 stackTrace.append(throwable.getMessage()).append('\n');
@@ -248,7 +250,7 @@ public class MainActivity extends AppCompatActivity{
             navigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
-                        public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                             // set item as selected to persist highlight
                             menuItem.setChecked(true);
                             // close drawer when item is tapped
@@ -363,7 +365,6 @@ public class MainActivity extends AppCompatActivity{
             debug = Boolean.parseBoolean(getString(R.string.debug));
             always_cap = Boolean.parseBoolean(getString(R.string.always_cap));
             chroot_dir = getString(R.string.chroot_dir);
-            monstart = Boolean.parseBoolean(getString(R.string.monstart));
             custom_chroot_cmd = "";
             cont_on_fail = Boolean.parseBoolean(getString(R.string.cont_on_fail));
             watchdog = Boolean.parseBoolean(getString(R.string.watchdog));
@@ -385,7 +386,6 @@ public class MainActivity extends AppCompatActivity{
             wl_path = data_path + "/wordlists";
             cap_path = data_path + "/capture_files";
             reaver_sess_path = data_path + "/reaver_sessions";
-            firm_backup_file = data_path + "/fw_bcmdhd.orig.bin";
             manufDBFile = path + "/manuf.db";
             ArrayList<File> dirs = new ArrayList<>();
             dirs.add(new File(cap_tmp_path));
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity{
                     File[] files = old_dir.listFiles();
                     if(files!=null){
                         Toast.makeText(MainActivity.this, "Moving cap files from " + old_dir.getAbsolutePath() + " to " + cap_path, Toast.LENGTH_LONG).show();
-                        for(File f : old_dir.listFiles()){
+                        for(File f : Objects.requireNonNull(old_dir.listFiles())){
                             //Move all the files to the new directory
                             f.renameTo(new File(cap_path, f.getName()));
                         }
@@ -553,12 +553,12 @@ public class MainActivity extends AppCompatActivity{
                 }
 
                 //Extract busybox
-                extract("busybox", tools_location, true);
+                extract("busybox", tools_location);
                 busybox = path + "/bin/busybox";
 
                 //Extract tools
                 boolean install = true;
-                if(bin.list().length==21 && lib.list().length==2 && info!=null){
+                if(Objects.requireNonNull(bin.list()).length==21 && Objects.requireNonNull(lib.list()).length==2 && info!=null){
                     if(info.versionCode==pref.getInt("tools_version", 0)){
                         if(debug) Log.d("HIJACKER/SetupTask", "Tools already installed");
                         install = false;
@@ -568,28 +568,58 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
                 if(install){
-                    extract("airbase-ng", tools_location, true);
-                    extract("aircrack-ng", tools_location, true);
-                    extract("aireplay-ng", tools_location, true);
-                    extract("airodump-ng", tools_location, true);
-                    extract("besside-ng", tools_location, true);
-                    extract("ivstools", tools_location, true);
-                    extract("iw", tools_location, true);
-                    extract("iwconfig", tools_location, true);
-                    extract("iwlist", tools_location, true);
-                    extract("iwpriv", tools_location, true);
-                    extract("kstats", tools_location, true);
-                    extract("makeivs-ng", tools_location, true);
-                    extract("mdk3", tools_location, true);
-                    extract("nc", tools_location, true);
-                    extract("packetforge-ng", tools_location, true);
-                    extract("reaver", tools_location, true);
-                    extract("reaver-wash", tools_location, true);
-                    extract("wesside-ng", tools_location, true);
-                    extract("wpaclean", tools_location, true);
-                    extract("libfakeioctl.so", lib_location, true);
-                    extract("libnexmon.so", lib_location, true);
+                    extract("airbase-ng", tools_location);
+                    extract("aircrack-ng", tools_location);
+                    extract("aireplay-ng", tools_location);
+                    extract("airodump-ng", tools_location);
+                    extract("besside-ng", tools_location);
+                    extract("ivstools", tools_location);
+                    extract("iw", tools_location);
+                    extract("iwconfig", tools_location);
+                    extract("iwlist", tools_location);
+                    extract("iwpriv", tools_location);
+                    extract("kstats", tools_location);
+                    extract("makeivs-ng", tools_location);
+                    extract("mdk3", tools_location);
+                    extract("nc", tools_location);
+                    extract("packetforge-ng", tools_location);
+                    extract("reaver", tools_location);
+                    extract("reaver-wash", tools_location);
+                    extract("wesside-ng", tools_location);
+                    extract("wpaclean", tools_location);
+                    extract("airmon-ng", tools_location);
+                    extract("airdecloak-ng", tools_location);
+                    extract("airodump-ng-oui-update", tools_location);
+                    extract("airolib-ng", tools_location);
+                    extract("airserv-ng", tools_location);
+                    extract("airtun-ng", tools_location);
+                    extract("airventriloguist-ng", tools_location);
+                    extract("bully", tools_location);
+                    extract("cewl.rb", tools_location);
+                    extract("cowpatty", tools_location);
+                    extract("genpmk", tools_location);
+                    extract("hcxdumptool", tools_location);
+                    extract("hcxtools", tools_location);
+                    extract("hcxeiutool", tools_location);
+                    extract("hcxhash2cap", tools_location);
+                    extract("hcxhashtool", tools_location);
+                    extract("hcxpcapngtool", tools_location);
+                    extract("hcxpmktool", tools_location);
+                    extract("hcxpsktool", tools_location);
+                    extract("hcxwltool", tools_location);
+                    extract("ivstools", tools_location);
+                    extract("iwevent", tools_location);
+                    extract("manuf", tools_location);
+                    extract("iwspy", tools_location);
+                    extract("john", tools_location);
+                    extract("john.conf", tools_location);
+                    extract("whoismac", tools_location);
+                    extract("wlancap2wpasec", tools_location);
+                    extract("pixiewps", tools_location);
+                    extract("pixiewrapper", tools_location);
+                    extract("passwordlist", tools_location);
 
+                    // The line below splits mdk3 in two utilities to prevent crash if run 2 attacks.
                     runOne("cd " + path + "/bin; mv mdk3 mdk3bf; cp mdk3bf mdk3dos");
 
                     if(info!=null){
@@ -598,41 +628,8 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
 
-                //Detect device chipset
-                publishProgress(getString(R.string.detecting_device_chipset));
-                Shell shell = getFreeShell();
-
-                String firmwarePath = findFirmwarePath(shell);
-                if(firmwarePath!=null){
-                    //Get chipset from firmware file
-                    shell.run("strings " + firmwarePath + " | " + busybox + " grep \"FWID:\"; echo ENDOFSTRINGS");
-                    devChipset = getLastLine(shell.getShell_out(), "ENDOFSTRINGS");
-                    int index = devChipset.indexOf('-');
-                    if(index != -1){
-                        devChipset = devChipset.substring(0, index);
-                    }
-                }
-                Log.i("HIJACKER/DetectDev", "devChipset is " + devChipset);
-                shell.done();
-
-                //Set directories
-                prefix = "LD_PRELOAD=" + path + "/lib/";
-                if(devChipset.startsWith("4339")) {
-                    //BCM4339
-                    prefix += "libfakeioctl.so";
-                }else if(devChipset.startsWith("4358")){
-                    //BCM4358
-                    prefix += "libnexmon.so";
-                }else{
-                    //Default (detected but not included)
-                    SettingsFragment.allow_prefix = true;       //Allow user to change the prefix
-                    prefix = pref.getString("prefix", null);    //Use user-set prefix
-
-                    if(prefix==null){
-                        //No user-set prefix, use default
-                        prefix = "LD_PRELOAD=" + path + "/lib/libfakeioctl.so";
-                    }
-                }
+                SettingsFragment.allow_prefix = true;       //Allow user to change the prefix
+                prefix = pref.getString("prefix", null);    //Use user-set prefix
 
                 airodump_dir = path + "/bin/airodump-ng";
                 aireplay_dir = path + "/bin/aireplay-ng";
@@ -640,6 +637,30 @@ public class MainActivity extends AppCompatActivity{
                 mdk3bf_dir = path + "/bin/mdk3bf";
                 mdk3dos_dir = path + "/bin/mdk3dos";
                 reaver_dir = path + "/bin/reaver";
+                bully_dir = path + "/bin/bully";
+                airmon_dir = path + "/bin/airmon-ng";
+                airodump_oui_dir = path + "/bin/airodump-ng-oui-update";
+                airolib_dir = path + "/bin/airolib-ng";
+                hcxdumptool_dir = path + "/bin/hcxdumptool";
+                cowpatty_dir = path + "/bin/cowpatty";
+                genpmk_dir = path + "/bin/genpmk";
+                //hcxhashtool_dir = path + "/bin/hcxhashtool";
+                hcxpcapngtool_dir = path + "/bin/hcxpcapngtool";
+                john_dir = path + "/bin/john";
+                johnconf_dir = path + "/bin/john.conf";
+                iwspy_dir = path + "/bin/iwspy";
+                iwgetid_dir = path + "/bin/iwgetid";
+                hcxpsktool_dir = path + "/bin/hcxpsktool";
+                hcxhashtool_dir = path + "/bin/hcxhashtool";
+                manuf_dir = path + "/bin/manuf.rb";
+                pixiewps_dir = path + "/bin/pixiewps";
+                pixiewrapper_dir = path + "/bin/pixiewrapper";
+                whoismac_dir = path + "/bin/whoismac";
+                wlancap2wpasec_dir = path + "/bin/wlancap2wpasec";
+                //cewl_dir = path + "/bin/cewl";
+                //iwevent_dir = path + "/bin/iwevent";
+                //hcxwltool_dir = path + "/bin/hcxwltool";
+
             }else{
                 Log.e("HIJACKER/onCreate", "Device not armv7l or aarch64, can't install tools");
                 busybox = "busybox";
@@ -653,6 +674,26 @@ public class MainActivity extends AppCompatActivity{
                 mdk3bf_dir = "mdk3";
                 mdk3dos_dir = "mdk3";
                 reaver_dir = "reaver";
+                bully_dir = "bully";
+                cowpatty_dir = "cowpatty";
+                //cewl_dir = "cewl";;
+                john_dir = "john";
+                johnconf_dir = "john.conf";
+                iwspy_dir = "iwspy";
+                //iwevent_dir = "iwevent";
+                iwgetid_dir = "iwgetid";
+                manuf_dir = "manuf.rb";
+                pixiewps_dir = "pixiewps";
+                pixiewrapper_dir = "pixiewrapper";
+                whoismac_dir = "whoismac";
+                wlancap2wpasec_dir = "wlancap2wpasec";
+                //hcxwltool_dir = "hcxwltool";
+                hcxpsktool_dir = "hcxwltool";
+                hcxhashtool_dir = "hcxhashtool";
+                //hcxeiutool_dir = "hcxeuitool";
+                airolib_dir = "airolib";
+                airmon_dir = "airmon-ng";
+                airodump_oui_dir = "airodump-ng-oui-update";
             }
 
             //Initialize RootFile (requires root) and Airodump
@@ -899,14 +940,6 @@ public class MainActivity extends AppCompatActivity{
             publishProgress(getString(R.string.deleting_bug_report));
             File report = new File(Environment.getExternalStorageDirectory() + "/report.txt");
             if(report.exists()) report.delete();
-
-            //Show FirstRunDialog
-            if(customDialog!=null){
-                FirstRunDialog frDialog = new FirstRunDialog();
-                frDialog.show(getFragmentManager(), "FirstRunDialog");
-                frDialog._wait();
-            }
-
             return true;
         }
         @Override
@@ -961,7 +994,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    void extract(String filename, String out_dir, boolean chmod){
+    void extract(String filename, String out_dir){
         File f = new File(out_dir, filename);
         if(f.exists()) f.delete();          //Delete file in case it's outdated
         try{
@@ -975,9 +1008,7 @@ public class MainActivity extends AppCompatActivity{
             }
             in.close();
             out.close();
-            if(chmod){
-                runOne("chmod 755 " + out_dir + "/" + filename);
-            }
+            runOne("chmod 755 " + out_dir + "/" + filename);
         }catch(IOException e){
             Log.e("HIJACKER/FileProvider", "Exception copying from assets", e);
         }
@@ -1190,9 +1221,8 @@ public class MainActivity extends AppCompatActivity{
         if(!isArchValid()){
             prefix = pref.getString("prefix", prefix);
         }
-        deauthWait = Integer.parseInt(pref.getString("deauthWait", Integer.toString(deauthWait)));
+        deauthWait = Integer.parseInt(Objects.requireNonNull(pref.getString("deauthWait", Integer.toString(deauthWait))));
         chroot_dir = pref.getString("chroot_dir", chroot_dir);
-        monstart = pref.getBoolean("monstart", monstart);
         enable_monMode = pref.getString("enable_monMode", enable_monMode);
         disable_monMode = pref.getString("disable_monMode", disable_monMode);
         enable_on_airodump = pref.getBoolean("enable_on_airodump", enable_on_airodump);
@@ -1211,7 +1241,7 @@ public class MainActivity extends AppCompatActivity{
         custom_chroot_cmd = pref.getString("custom_chroot_cmd", custom_chroot_cmd);
         cont_on_fail = pref.getBoolean("cont_on_fail", cont_on_fail);
         update_on_startup = pref.getBoolean("update_on_startup", update_on_startup);
-        band = Integer.parseInt(pref.getString("band", Integer.toString(band)));
+        band = Integer.parseInt(Objects.requireNonNull(pref.getString("band", Integer.toString(band))));
         show_client_count = pref.getBoolean("show_client_count", show_client_count);
 
         progress.setMax(deauthWait);
@@ -1384,16 +1414,17 @@ public class MainActivity extends AppCompatActivity{
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==0){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0) {
             //The one and only request this app sends
-            synchronized(this){
+            synchronized (this) {
                 this.notify();
             }
         }
     }
     @SuppressLint("MissingSuperCall")
     @Override
-    protected void onSaveInstanceState(Bundle outState){
+    protected void onSaveInstanceState(@NonNull Bundle outState){
         //No call for super(), avoid IllegalStateException on FragmentManagerImpl.checkStateLoss.
     }
 
@@ -1828,7 +1859,7 @@ public class MainActivity extends AppCompatActivity{
     }
     boolean internetAvailable(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getNetworkInfo(1).getState()==NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(0).getState()==NetworkInfo.State.CONNECTED;
+        return Objects.requireNonNull(connectivityManager.getNetworkInfo(1)).getState()==NetworkInfo.State.CONNECTED || Objects.requireNonNull(connectivityManager.getNetworkInfo(0)).getState()==NetworkInfo.State.CONNECTED;
     }
     static boolean createReport(File out, String filesDir, String stackTrace, Process shell){
         if(!out.exists()){
@@ -1873,17 +1904,18 @@ public class MainActivity extends AppCompatActivity{
             }
 
             writer.close();
-        }catch(IOException e){
-            if(writer != null){
-                try{
+        } catch(IOException e) {
+            if (writer != null) {
+                try {
                     writer.close();
-                }catch(IOException ignored){}
+                } catch(IOException ignored){}
             }
             return false;
         }
         return true;
     }
 
+    /*
     static String findFirmwarePath(Shell shell){
         //Blocking function, don't run on main thread
         boolean flag = false;
@@ -1936,11 +1968,12 @@ public class MainActivity extends AppCompatActivity{
 
         return firmware;
     }
+     */
     static boolean isArchValid(){
         return arch.matches("(.*)arm(.*)") || arch.matches("aarch64");
     }
 
-    static{
+    static {
         System.loadLibrary("native-lib");
     }
 }
