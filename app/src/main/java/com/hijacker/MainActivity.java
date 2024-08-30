@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity{
     static int versionCode;
     static String devChipset = "";
     static ActionBar actionBar;
-    static String bootkali_init_bin = "bootkali_init";
+    static String bootkali_init_bin = "/data/data/com.offsec.nethunter/scripts/bootkali_init";
     //Preferences - Defaults are in strings.xml
     static String iface, prefix, airodump_dir, aireplay_dir, aircrack_dir, mdk3bf_dir, mdk3dos_dir, reaver_dir, chroot_dir,
             enable_monMode, disable_monMode, custom_chroot_cmd;
@@ -630,7 +630,7 @@ public class MainActivity extends AppCompatActivity{
 
                     if(prefix==null){
                         //No user-set prefix, use default
-                        prefix = "LD_PRELOAD=" + path + "/lib/libfakeioctl.so";
+                        prefix = "";
                     }
                 }
 
@@ -1694,9 +1694,9 @@ public class MainActivity extends AppCompatActivity{
         shell.done();
         String[] paths = path.split(":");
         for(String temp : paths){
-            if(new RootFile(temp + "/bootkali_init").exists()){
+            if(new RootFile("/data/data/com.offsec.nethunter/scripts/bootkali_init").exists()){
                 bin = true;
-                bootkali_init_bin = temp + "/bootkali_init";
+                bootkali_init_bin = "/data/data/com.offsec.nethunter/scripts/bootkali_init";
                 break;
             }
         }
