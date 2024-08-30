@@ -36,20 +36,18 @@ public class FirstRunDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.first_run);
         builder.setTitle(R.string.first_run_title);
-        builder.setPositiveButton(R.string.install_firmware, new DialogInterface.OnClickListener() {
+        /*builder.setPositiveButton(R.string.install_firmware, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {}
-        });
-        builder.setNegativeButton(R.string.home, new DialogInterface.OnClickListener() {
+        });*/
+        /*builder.setNegativeButton(R.string.home, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Go to Home
                 dismissAllowingStateLoss();
             }
-        });
-        builder.setNeutralButton(R.string.exit, new DialogInterface.OnClickListener() {
+        });*/
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                getActivity().finish();
-            }
+            public void onClick(DialogInterface dialog, int which) {}
         });
         return builder.create();
     }
