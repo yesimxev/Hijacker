@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity{
     static int versionCode;
     static boolean init=false;      //True on first run to swap the dialogs for initialization
     static ActionBar actionBar;
-    static String bootkali_init_bin = "bootkali_init";
+    static String bootkali_init_bin = "/data/data/com.offsec.nethunter/scripts/bootkali_init";
     //Preferences - Defaults are in strings.xml
     static String iface, prefix, airodump_dir, aireplay_dir, aircrack_dir, mdk3bf_dir, mdk3dos_dir, reaver_dir, cap_dir, chroot_dir,
             enable_monMode, disable_monMode, custom_chroot_cmd;
@@ -208,12 +208,12 @@ public class MainActivity extends AppCompatActivity{
                 //First start
                 new DisclaimerDialog().show(getFragmentManager(), "Disclaimer");
                 //Check for SuperSU
-                if(!new File("/su").exists()){
+                /*if(!new File("/su").exists()){
                     ErrorDialog dialog = new ErrorDialog();
                     dialog.setTitle(getString(R.string.su_notfound_title));
                     dialog.setMessage(getString(R.string.su_notfound));
                     dialog.show(getFragmentManager(), "ErrorDialog");
-                }
+                }*/
             }
 
             loadingDialog = new LoadingDialog();
@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity{
                 }
                 busybox = path + "/bin/busybox";
 
-                prefix = "LD_PRELOAD=" + path + "/lib/libfakeioctl.so";
+                prefix = "";
                 airodump_dir = path + "/bin/airodump-ng";
                 aireplay_dir = path + "/bin/aireplay-ng";
                 aircrack_dir = path + "/bin/aircrack-ng";
@@ -1517,9 +1517,9 @@ public class MainActivity extends AppCompatActivity{
         shell.done();
         String paths[] = path.split(":");
         for(String temp : paths){
-            if(new RootFile(temp + "/bootkali_init").exists()){
+            if(new RootFile("/data/data/com.offsec.nethunter/scripts/").exists()){
                 bin = true;
-                bootkali_init_bin = temp + "/bootkali_init";
+                bootkali_init_bin = "/data/data/com.offsec.nethunter/scripts/bootkali_init";
                 break;
             }
         }

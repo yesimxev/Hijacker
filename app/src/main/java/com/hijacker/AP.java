@@ -320,12 +320,12 @@ class AP extends Device{
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
 
         //add(groupId, itemId, order, title)
-        popup.getMenu().add(0, 0, 0, "Info");
-        popup.getMenu().add(0, 1, 1, this.isMarked ? "Unmark" : "Mark");
-        popup.getMenu().add(0, 2, 2, "Copy MAC");
-        popup.getMenu().add(0, 3, 3, "Watch");
+        popup.getMenu().add(0, 3, 0, "Watch");
+        popup.getMenu().add(0, 0, 1, "Info");
+        popup.getMenu().add(0, 1, 2, this.isMarked ? "Unmark" : "Mark");
+        popup.getMenu().add(0, 2, 3, "Copy MAC");
         popup.getMenu().add(0, 5, 4, "Set alias");
-        popup.getMenu().add(0, 4, 5, "Attack...");
+        popup.getMenu().add(0, 4, 5, "More...");
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(android.view.MenuItem item) {

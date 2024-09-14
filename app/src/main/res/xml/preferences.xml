@@ -29,7 +29,6 @@
             android:singleLine="true"
             android:title="@string/prefix_title"
             android:key="prefix"
-            android:enabled="false"
             android:summary="@string/prefix_sum"
             android:dialogMessage="@string/prefix_desc"
             android:dialogTitle="@string/prefix_title" />
@@ -104,7 +103,7 @@
             android:key="disable_monMode"
             android:defaultValue="@string/disable_monMode" />
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="enable_on_airodump"
             android:summary="@string/enable_on_airodump_sum"
             android:title="@string/enable_on_airodump_title" />
@@ -113,7 +112,8 @@
         <Preference
             android:title="@string/install_nexmon_title"
             android:summary="@string/install_nexmon_sum"
-            android:key="install_nexmon" />
+            android:key="install_nexmon"
+            android:visibility="gone"/>
         <Preference
             android:title="@string/test_title"
             android:summary="@string/test_sum"
@@ -156,7 +156,8 @@
     <PreferenceCategory android:title="@string/other">
         <Preference
             android:title="@string/restore_firmware"
-            android:key="restore_firmware" />
+            android:key="restore_firmware"
+            android:visibility="gone"/>
         <Preference
             android:title="@string/reset_title"
             android:key="reset_pref" />
