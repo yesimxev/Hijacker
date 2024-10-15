@@ -362,12 +362,12 @@ class AP extends Device{
                         if(AP.this.clients.size()>0) popup2.getMenu().add(0, 1, 1, "Disconnect Client");
                         popup2.getMenu().add(0, 2, 2, "Copy disconnect command");
 
-                        popup2.getMenu().add(0, 3, 3, "DoS");
+                        popup2.getMenu().add(0, 3, 3, "Mdk3 DoS");
                         if(AP.this.sec==WPA || AP.this.sec==WPA2 || AP.this.sec==WEP){
-                            popup2.getMenu().add(0, 4, 4, "Crack");
-                            popup2.getMenu().add(0, 5, 5, "Copy crack command");
+                            popup2.getMenu().add(0, 4, 4, "Capture");
+                            popup2.getMenu().add(0, 5, 5, "Copy capture command");
                         }
-                        popup2.getMenu().add(0, 6, 6, "Crack with Reaver");
+                        popup2.getMenu().add(0, 6, 6, "WPS Attack with Reaver");
 
                         popup2.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                             @Override
