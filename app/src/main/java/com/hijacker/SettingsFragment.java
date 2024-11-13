@@ -59,7 +59,6 @@ public class SettingsFragment extends PreferenceFragment {
                 temp.setSummary(getString(R.string.incorrect_arch) + ' ' + arch);
                 temp.setEnabled(false);
             }
-            if(!arch.equals("aarch64")) findPreference("prefix").setEnabled(true);
         }
 
         findPreference("test_tools").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

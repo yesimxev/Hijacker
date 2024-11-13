@@ -429,7 +429,11 @@ public class MainActivity extends AppCompatActivity{
                 }
                 busybox = path + "/bin/busybox";
 
-                prefix = "";
+                prefix = pref.getString("prefix", null);    //Use user-set prefix
+                if(prefix==null){
+                    //No user-set prefix, use empty string
+                    prefix = "";
+                }
                 airodump_dir = path + "/bin/airodump-ng";
                 aireplay_dir = path + "/bin/aireplay-ng";
                 aircrack_dir = path + "/bin/aircrack-ng";
