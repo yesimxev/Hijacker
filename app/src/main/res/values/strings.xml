@@ -328,7 +328,7 @@
     <string name="deauthWait" translatable="false">20</string>
     <string name="show_notif" translatable="false">true</string>
     <string name="show_details" translatable="false">true</string>
-    <string name="airOnStartup" translatable="false">false</string>
+    <string name="airOnStartup" translatable="false">true</string>
     <string name="debug" translatable="false">true</string>
     <string name="always_cap" translatable="false">false</string>
     <string name="cont_on_fail" translatable="false">false</string>
