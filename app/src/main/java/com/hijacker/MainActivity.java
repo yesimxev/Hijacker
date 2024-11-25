@@ -123,7 +123,10 @@ public class MainActivity extends AppCompatActivity{
     static boolean sort_reverse = false;
     static boolean toSort = false;     //Variable to mark that the list must be sorted, so Tile.sort() must be called
     //Views that need to be accessible globally
-    static TextView ap_count, st_count;                               //AP and ST count textviews in toolbar
+    static TextView ap_count, st_count;
+    //AP and ST count textviews in toolbar
+    static ImageView ap_count_icon, st_count_icon;
+    //AP and ST count imageviews in toolbar
     static ProgressBar progress;
     static Toolbar toolbar;
     static View rootView;
@@ -336,7 +339,9 @@ public class MainActivity extends AppCompatActivity{
             //Find views
             publishProgress(getString(R.string.init_views));
             ap_count = findViewById(R.id.ap_count);
+            ap_count_icon = findViewById(R.id.ap_count_icon);
             st_count = findViewById(R.id.st_count);
+            st_count_icon = findViewById(R.id.st_count_icon);
             progress = findViewById(R.id.progressBar);
             rootView = findViewById(R.id.fragment1);
             overflow[0] = getDrawable(R.drawable.overflow0);
@@ -348,6 +353,17 @@ public class MainActivity extends AppCompatActivity{
             overflow[6] = getDrawable(R.drawable.overflow6);
             overflow[7] = getDrawable(R.drawable.overflow7);
             actionBar = getSupportActionBar();
+
+            //WearOS optimisation
+            Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
+            pref.edit().putBoolean("running_on_wearos", iswatch).apply();
+
+            if (iswatch) {
+                ap_count.setVisibility(View.GONE);
+                st_count.setVisibility(View.GONE);
+                ap_count_icon.setVisibility(View.GONE);
+                st_count_icon.setVisibility(View.GONE);
+            }
 
             //Load defaults
             publishProgress(getString(R.string.loading_defaults));
@@ -1363,11 +1379,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MainActivity.menu = menu;
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
         getMenuInflater().inflate(R.menu.toolbar, menu);
         if(airOnStartup){
             menu.getItem(1).setIcon(R.drawable.stop_drawable);
             menu.getItem(1).setTitle(R.string.stop);
         }
+        if (iswatch) menu.getItem(0).setVisible(false);
         menu.getItem(3).setEnabled(false);
         return true;
     }

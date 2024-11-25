@@ -27,6 +27,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <ImageView
+                android:id="@+id/ap_count_icon"
                 android:layout_height="@android:dimen/app_icon_size"
                 app:srcCompat="@drawable/ap_drawable"
                 android:adjustViewBounds="false"
@@ -51,6 +52,7 @@
                 android:focusable="true" />
 
             <ImageView
+                android:id="@+id/st_count_icon"
                 android:layout_height="@android:dimen/app_icon_size"
                 app:srcCompat="@drawable/st_drawable"
                 android:adjustViewBounds="false"
