@@ -363,6 +363,11 @@ public class MainActivity extends AppCompatActivity{
                 st_count.setVisibility(View.GONE);
                 ap_count_icon.setVisibility(View.GONE);
                 st_count_icon.setVisibility(View.GONE);
+                pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
+                pref_edit.putString("enable_monMode", "nexutil -m1");
+                pref_edit.putString("disable_monMode", "nexutil -m0");
+                pref_edit.putBoolean("enable_on_airodump", true);
+                pref_edit.apply();
             }
 
             //Load defaults
