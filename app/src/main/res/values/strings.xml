@@ -116,7 +116,7 @@
     <string name="disclaimer_title">Disclaimer</string>
     <string name="disclaimer">It is extremely illegal to use this application against networks for which you don\'t have permission.
         You can use it only on YOUR network or a network that you are authorized to.
-        I am not responsible for how you use this application and any damages you may cause.\nConsider yourself warned.</string>
+        I am not responsible for how you use this application and any damages you may cause. Consider yourself warned.</string>
     <string name="agree">I agree</string>
     <string name="not_agree">I don\'t agree</string>
 
@@ -163,9 +163,8 @@
     <string name="first_run_title">Welcome</string>
     <string name="first_run">This application is a Graphical User Interface for the wireless auditing tools airodump-ng, aireplay-ng, aircrack-ng, mdk3 and reaver, and requires a Monitor Mode enabled WiFi interface.
         Only some android devices support this but none of them natively.
-        You need to use a custom firmware (bcmon, Nexmon) so that your wireless adapter can be used in Monitor Mode. External adapters can also be used.
-        You can configure your interface\'s name in Settings. This app requires root privileges to run the tools.
-        \nYou can install the Nexmon firmware now, or you can go to the Home Screen.</string>
+        You need to use a custom firmware or kernel so that your wireless adapter can be used in Monitor Mode with injection. External adapters can also be used.
+        You can configure your interface\'s name in Settings. This app requires root privileges to run the tools.</string>
     <string name="install_firmware">Install Nexmon</string>
 
     <!-- InstallFirmwareDialog -->
@@ -319,22 +318,22 @@
 
     <!-- Default Preferences -->
     <string name="iface" translatable="false">wlan0</string>
-    <string name="prefix" translatable="false">LD_PRELOAD=/vendor/lib/libfakeioctl.so</string>
-    <string name="chroot_dir" translatable="false">/data/local/nhsystem/kali-armhf</string>
+    <string name="prefix" translatable="false"></string>
+    <string name="chroot_dir" translatable="false">/data/local/nhsystem/kalifs</string>
     <string name="monstart" translatable="false">false</string>
-    <string name="enable_monMode" translatable="false">nexutil -m true</string>
-    <string name="disable_monMode" translatable="false">nexutil -m false</string>
-    <string name="enable_on_airodump" translatable="false">true</string>
-    <string name="deauthWait" translatable="false">20</string>
+    <string name="enable_monMode" translatable="false"></string>
+    <string name="disable_monMode" translatable="false"></string>
+    <string name="enable_on_airodump" translatable="false">false</string>
+    <string name="deauthWait" translatable="false">5</string>
     <string name="show_notif" translatable="false">true</string>
     <string name="show_details" translatable="false">true</string>
-    <string name="airOnStartup" translatable="false">true</string>
+    <string name="airOnStartup" translatable="false">false</string>
     <string name="debug" translatable="false">true</string>
     <string name="always_cap" translatable="false">false</string>
     <string name="cont_on_fail" translatable="false">false</string>
     <string name="watchdog" translatable="false">true</string>
     <string name="target_deauth" translatable="false">false</string>
-    <string name="auto_update" translatable="false">true</string>
+    <string name="auto_update" translatable="false">false</string>
     <string name="band" translatable="false">1</string>
     <string name="show_client_count" translatable="false">true</string>
 
