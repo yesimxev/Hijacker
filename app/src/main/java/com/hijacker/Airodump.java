@@ -79,7 +79,7 @@ class Airodump{
                 if(capFile.equals("ENDOFLS")){
                     capFile = null;
                 }else{
-                    Snackbar.make(rootView, "Cap file is " + capFile, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(rootView, "Saving handshake to " + capFile, Snackbar.LENGTH_LONG).show();
                 }
             }catch(InterruptedException ignored){
             }finally{
