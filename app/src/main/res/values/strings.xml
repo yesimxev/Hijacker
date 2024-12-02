@@ -4,6 +4,11 @@
 
     <!-- Toolbar -->
     <string name="stop_aireplay">Stop Aireplay</string>
+    <string name="copy_last_airodump_title">Copy last Airodump command</string>
+    <string name="copy_last_aireplay_title">Copy last Aireplay command</string>
+    <string name="copy_last_mdk_title">Copy last MDK command</string>
+    <string name="copy_last_reaver_title">Copy last Reaver command</string>
+    <string name="no_last_command_available">No last command available</string>
 
     <!-- Generic text -->
     <string name="incorrect_arch">Available only on ARM architectures, this is</string>
@@ -27,6 +32,7 @@
     <string name="size">Size</string>
     <string name="no_internet">No internet connection</string>
     <string name="unknown_error">An unknown error occurred</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <!-- Navigation Drawer -->
     <string name="nav_airodump">Airodump</string>

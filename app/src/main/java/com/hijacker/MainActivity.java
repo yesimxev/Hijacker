@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity{
     static boolean wpacheckcont = false;
     static boolean notif_on = false, background = false;    //notif_on: notification should be shown, background: the app is running in the background
     static int aireplay_running = 0, currentFragment = FRAGMENT_AIRODUMP;         //Set currentFragment in onResume of each Fragment
+    static String last_airodump = null, last_aireplay = null, last_mdk = null, last_reaver = null;
     //Filters
     static boolean show_ap = true, show_st = true, show_na_st = true, wpa = true, wep = true, opn = true;
     static boolean[] show_ch = {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
@@ -1000,6 +1001,7 @@ public class MainActivity extends AppCompatActivity{
             if(debug) Log.d("HIJACKER/_startAireplay", cmd);
             Runtime.getRuntime().exec(cmd);
             last_action = System.currentTimeMillis();
+            last_aireplay = cmd;
         }catch(IOException e){ Log.e("HIJACKER/Exception", "Caught Exception in _startAireplay() start block: " + e.toString()); }
         runInHandler(new Runnable(){
             @Override
@@ -1034,6 +1036,7 @@ public class MainActivity extends AppCompatActivity{
             String cmd = "su -c " + prefix + " " + mdk3bf_dir + " " + iface + " b -m ";
             if(str!=null) cmd += str;
             if(debug) Log.d("HIJACKER/MDK3", cmd);
+            last_mdk = cmd;
             Runtime.getRuntime().exec(cmd);
         }catch(IOException e){ Log.e("HIJACKER/startBF", e.toString()); }
         last_action = System.currentTimeMillis();
@@ -1052,6 +1055,7 @@ public class MainActivity extends AppCompatActivity{
             String cmd = "su -c " + prefix + " " + mdk3dos_dir + " " + iface + " a -m";
             cmd += str==null ? "" : " -i " + str;
             if(debug) Log.d("HIJACKER/MDK3", cmd);
+            last_mdk = cmd;
             Runtime.getRuntime().exec(cmd);
         }catch(IOException e){ Log.e("HIJACKER/startAdos", e.toString()); }
         last_action = System.currentTimeMillis();
@@ -1300,6 +1304,34 @@ public class MainActivity extends AppCompatActivity{
             case R.id.export:
                 new ExportDialog().show(mFragmentManager, "ExportDialog");
                 return true;
+
+            case R.id.copy_airodump:
+                if(last_airodump==null){
+                    Toast.makeText(this, getString(R.string.no_last_command_available), Toast.LENGTH_SHORT).show();
+                }else{
+                    copy(last_airodump, rootView);
+                }
+
+            case R.id.copy_aireplay:
+                if(last_aireplay==null){
+                    Toast.makeText(this, getString(R.string.no_last_command_available), Toast.LENGTH_SHORT).show();
+                }else{
+                    copy(last_aireplay, rootView);
+                }
+
+            case R.id.copy_mdk:
+                if(last_mdk==null){
+                    Toast.makeText(this, getString(R.string.no_last_command_available), Toast.LENGTH_SHORT).show();
+                }else{
+                    copy(last_mdk, rootView);
+                }
+
+            case R.id.copy_reaver:
+                if(last_reaver==null){
+                    Toast.makeText(this, getString(R.string.no_last_command_available), Toast.LENGTH_SHORT).show();
+                }else{
+                    copy(last_reaver, rootView);
+                }
 
             default:
                 return super.onOptionsItemSelected(item);

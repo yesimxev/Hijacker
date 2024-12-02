@@ -40,6 +40,7 @@ import static com.hijacker.MainActivity.enable_on_airodump;
 import static com.hijacker.MainActivity.getLastLine;
 import static com.hijacker.MainActivity.iface;
 import static com.hijacker.MainActivity.last_action;
+import static com.hijacker.MainActivity.last_airodump;
 import static com.hijacker.MainActivity.notification;
 import static com.hijacker.MainActivity.prefix;
 import static com.hijacker.MainActivity.refreshState;
@@ -192,6 +193,7 @@ class Airodump{
                     int mode = channel==0 ? 0 : 1;
                     Process process = Runtime.getRuntime().exec(final_cmd);
                     last_action = System.currentTimeMillis();
+                    last_airodump = final_cmd;
                     BoundedBufferedReader in = new BoundedBufferedReader(new InputStreamReader(process.getErrorStream()));
                     String buffer;
                     while(Airodump.isRunning() && (buffer = in.readLine(MAX_READLINE_SIZE))!=null){
