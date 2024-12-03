@@ -188,8 +188,8 @@
     <!-- IsolatedFragment (xml) -->
     <string name="crack">Crack</string>
     <string name="stop">Stop</string>
-    <string name="disconnect_all">Disconnect All</string>
-    <string name="dos">DoS</string>
+    <string name="disconnect_all">Deauth All</string>
+    <string name="dos">MDK3 DoS</string>
 
     <!-- Main -->
     <string name="cap_notfound">cap file not found</string>

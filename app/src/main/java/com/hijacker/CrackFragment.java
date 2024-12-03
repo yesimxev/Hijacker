@@ -22,9 +22,12 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.snackbar.Snackbar;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,13 +74,14 @@ public class CrackFragment extends Fragment{
     EditText capfileView, wordlistView;
     RadioGroup wepRG, securityRG;
     RadioButton wepRB, wpaRB;
-    ScrollView consoleScrollView;
+    ScrollView consoleScrollView, crackScrollView;
 
     //Dimensions to restore animated views
     int normalOptHeight = -1, normalTestBtnWidth = -1;
     //User options
     static String console_text = "", capfile_text = null, wordlist_text = null;
     static int securityChecked = -1, wepChecked = -1;
+    static SharedPreferences pref;
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
         fragmentView = inflater.inflate(R.layout.crack_fragment, container, false);
@@ -85,6 +89,7 @@ public class CrackFragment extends Fragment{
         optionsContainer = fragmentView.findViewById(R.id.options_container);
         consoleView = fragmentView.findViewById(R.id.console);
         consoleScrollView = fragmentView.findViewById(R.id.console_scroll_view);
+        crackScrollView = fragmentView.findViewById(R.id.crack_scrollview);
         capfileView = fragmentView.findViewById(R.id.capfile);
         wordlistView = fragmentView.findViewById(R.id.wordlist);
         capFeBtn = fragmentView.findViewById(R.id.cap_fe_btn);
@@ -96,6 +101,14 @@ public class CrackFragment extends Fragment{
         wpaRB = fragmentView.findViewById(R.id.wpa_rb);
         startBtn = fragmentView.findViewById(R.id.start);
         speedTestBtn = fragmentView.findViewById(R.id.speed_test_btn);
+
+        //WearOS
+        pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
+
+        if (iswatch) {
+            speedTestBtn.setVisibility(View.GONE);
+        }
 
         capfileView.setOnEditorActionListener(new TextView.OnEditorActionListener(){
             @Override
@@ -110,7 +123,8 @@ public class CrackFragment extends Fragment{
 
         for (int i = 0; i < wepRG.getChildCount(); i++) {
             //Disable all the WEP options, wepRG.setEnabled(false) doesn't work
-            wepRG.getChildAt(i).setEnabled(false);
+            wepRG.setVisibility(View.GONE);
+            //wepRG.getChildAt(i).setEnabled(false);
         }
 
         if(task==null) task = new CrackTask(CrackTask.JOB_CRACK, null, null);
@@ -120,6 +134,7 @@ public class CrackFragment extends Fragment{
             public void onCheckedChanged(CompoundButton compoundButton, boolean b){
                 for (int i = 0; i < wepRG.getChildCount(); i++) {
                     //If wep is now checked, enable the wep options, otherwise disable them
+                    wepRG.setVisibility(View.VISIBLE);
                     wepRG.getChildAt(i).setEnabled(b);
                 }
                 wordlistView.setEnabled(!b);
@@ -584,6 +599,7 @@ public class CrackFragment extends Fragment{
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     consoleScrollView.fullScroll(View.FOCUS_DOWN);
+                    crackScrollView.fullScroll(View.FOCUS_DOWN);
                 }
                 @Override
                 public void onAnimationCancel(Animator animation) {}

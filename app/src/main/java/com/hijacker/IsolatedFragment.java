@@ -18,12 +18,15 @@ package com.hijacker;
  */
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,10 +47,15 @@ public class IsolatedFragment extends Fragment{
     private Runnable runnable;
     private boolean cont = false;
     static int exit_on;
+    static LinearLayout ap_details, ap_details2;
+    static SharedPreferences pref;
+    Button deauth_all, dos;
+
     View fragmentView;
     TextView essid, manuf, mac, sec1, numbers, sec2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
         fragmentView = inflater.inflate(R.layout.isolated_fragment, container, false);
 
         runnable = new Runnable(){
@@ -79,6 +87,23 @@ public class IsolatedFragment extends Fragment{
                 Tile.tiles.get(i).device.getPopupMenu((MainActivity)getActivity(), v).show();
             }
         });
+
+        //WearOS
+        pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
+        ap_details = fragmentView.findViewById(R.id.ap_details);
+        ap_details2 = fragmentView.findViewById(R.id.ap_details2);
+        deauth_all = fragmentView.findViewById(R.id.deauth_all);
+        dos = fragmentView.findViewById(R.id.dos);
+
+        if (iswatch) {
+            ap_details.setVisibility(View.GONE);
+            ap_details2.setVisibility(View.GONE);
+            deauth_all.setVisibility(View.GONE);
+            dos.setVisibility(View.GONE);
+            essid.setTextSize(12);
+            mac.setTextSize(12);
+        }
 
         return fragmentView;
     }

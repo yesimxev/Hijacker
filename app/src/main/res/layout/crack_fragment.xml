@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/crack_scrollview" >
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -159,7 +164,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="10sp" />
+            android:textSize="15sp" />
     </ScrollView>
 
     <LinearLayout
@@ -170,15 +175,17 @@
         <Button
             android:id="@+id/speed_test_btn"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:lines="1"
+            android:layout_weight="1"
             android:text="@string/speed_test" />
 
         <Button
             android:id="@+id/start"
+            android:textAlignment="center"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/start" />
@@ -186,3 +193,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>

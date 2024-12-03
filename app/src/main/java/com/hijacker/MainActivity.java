@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity{
 
             //WearOS optimisation
             Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
-            pref.edit().putBoolean("running_on_wearos", iswatch).apply();
+            pref_edit.putBoolean("running_on_wearos", iswatch).apply();
 
             if (iswatch) {
                 ap_count.setVisibility(View.GONE);
@@ -366,6 +366,7 @@ public class MainActivity extends AppCompatActivity{
                 pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
                 pref_edit.putString("enable_monMode", "nexutil -m1");
                 pref_edit.putString("disable_monMode", "nexutil -m0");
+                pref_edit.putString("deauthWait", "45");
                 pref_edit.putBoolean("enable_on_airodump", true);
                 pref_edit.apply();
             }
