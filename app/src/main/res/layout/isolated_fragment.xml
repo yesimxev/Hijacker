@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="19sp"
-                android:lines="2"
+                android:maxLines="2"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
                 android:clickable="true"
