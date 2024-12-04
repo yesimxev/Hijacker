@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity{
                 st_count_icon.setVisibility(View.GONE);
                 pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
                 pref_edit.putString("enable_monMode", "nexutil -m1");
-                pref_edit.putString("disable_monMode", "nexutil -m0");
+                pref_edit.putString("disable_monMode", "nexutil -m0;ifconfig wlan0 down && ifconfig wlan0 up");
                 pref_edit.putString("deauthWait", "45");
                 pref_edit.putBoolean("enable_on_airodump", true);
                 pref_edit.apply();
