@@ -47,10 +47,12 @@ import static com.hijacker.MainActivity.data_path;
 import static com.hijacker.MainActivity.debug;
 import static com.hijacker.MainActivity.getFixed;
 import static com.hijacker.MainActivity.iface;
+import static com.hijacker.MainActivity.pref;
 import static com.hijacker.MainActivity.prefix;
 import static com.hijacker.MainActivity.runInHandler;
 import static com.hijacker.MainActivity.sort;
 import static com.hijacker.MainActivity.startAireplay;
+import static com.hijacker.MainActivity.startAireplayWear;
 import static com.hijacker.MainActivity.stop;
 import static com.hijacker.MainActivity.toSort;
 
@@ -75,12 +77,14 @@ class ST extends Device{
         STsHM.put(this.mac, this);
     }
     void disconnect(){
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
         if(Airodump.getChannel() != connectedTo.ch){
             //switch channel only if airodump is running elsewhere
             stop(PROCESS_AIREPLAY);
             Airodump.startClean(connectedTo.ch);
         }
-        startAireplay(this.bssid, this.mac);
+        if (iswatch) startAireplayWear(this.bssid, this.mac);
+        else startAireplay(this.bssid, this.mac);
     }
     void update(){
         //For refresh

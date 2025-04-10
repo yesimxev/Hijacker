@@ -21,6 +21,7 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import static com.hijacker.AP.WEP;
@@ -48,8 +50,9 @@ public class IsolatedFragment extends Fragment{
     private boolean cont = false;
     static int exit_on;
     static LinearLayout ap_details, ap_details2;
+    static TextView clients;
     static SharedPreferences pref;
-    Button deauth_all, dos;
+    Button deauth_all, dos, capture;
 
     View fragmentView;
     TextView essid, manuf, mac, sec1, numbers, sec2;
@@ -90,19 +93,22 @@ public class IsolatedFragment extends Fragment{
 
         //WearOS
         pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
+        Boolean iswatch = pref.getBoolean("running_on_wearos", true);
         ap_details = fragmentView.findViewById(R.id.ap_details);
         ap_details2 = fragmentView.findViewById(R.id.ap_details2);
+        clients = fragmentView.findViewById(R.id.clients_title);
         deauth_all = fragmentView.findViewById(R.id.deauth_all);
         dos = fragmentView.findViewById(R.id.dos);
+        capture = fragmentView.findViewById(R.id.crack);
 
         if (iswatch) {
-            ap_details.setVisibility(View.GONE);
-            ap_details2.setVisibility(View.GONE);
+            clients.setVisibility(View.GONE);
             deauth_all.setVisibility(View.GONE);
+            capture.setGravity(Gravity.CENTER);
             dos.setVisibility(View.GONE);
             essid.setTextSize(12);
             mac.setTextSize(12);
+            menu.getItem(0).setVisible(true);
         }
 
         return fragmentView;
@@ -127,7 +133,7 @@ public class IsolatedFragment extends Fragment{
         ((MainActivity)getActivity()).refreshDrawer();
         thread = new Thread(runnable);
         thread.start();
-        ((Button)fragmentView.findViewById(R.id.crack)).setText(wpa_thread.isAlive() ? R.string.stop : R.string.crack);
+        ((Button)fragmentView.findViewById(R.id.crack)).setText(wpa_thread.isAlive() ? R.string.stop : R.string.capture);
         fragmentView.findViewById(R.id.crack).setEnabled(is_ap.sec==WPA || is_ap.sec==WPA2 || is_ap.sec==WEP);
         ((Button)fragmentView.findViewById(R.id.dos)).setText(MDKFragment.ados ? R.string.stop : R.string.dos);
         runInHandler(refreshRunnable);

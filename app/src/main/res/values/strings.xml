@@ -187,9 +187,10 @@
 
     <!-- IsolatedFragment (xml) -->
     <string name="crack">Crack</string>
+    <string name="capture">Capture</string>
     <string name="stop">Stop</string>
-    <string name="disconnect_all">Deauth All</string>
-    <string name="dos">MDK3 DoS</string>
+    <string name="disconnect_all">Deauth</string>
+    <string name="dos">Auth-DoS</string>
 
     <!-- Main -->
     <string name="cap_notfound">cap file not found</string>
@@ -241,6 +242,7 @@
     <string name="checking_su">Checking su…</string>
     <string name="requesting_root_access">Requesting root access…</string>
     <string name="starting_hijacker">Starting Hijacker…</string>
+    <string name="prep_watch">Preparing firmware…</string>
 
     <!-- MDKFragment -->
     <string name="bf_title">Beacon Flooding</string>
@@ -324,7 +326,7 @@
     <string name="enable_monMode" translatable="false"></string>
     <string name="disable_monMode" translatable="false"></string>
     <string name="enable_on_airodump" translatable="false">false</string>
-    <string name="deauthWait" translatable="false">5</string>
+    <string name="deauthWait" translatable="false">10</string>
     <string name="show_notif" translatable="false">true</string>
     <string name="show_details" translatable="false">true</string>
     <string name="airOnStartup" translatable="false">false</string>
@@ -337,6 +339,7 @@
     <string name="auto_update" translatable="false">false</string>
     <string name="band" translatable="false">1</string>
     <string name="show_client_count" translatable="false">true</string>
+    <string name="running_on_wearos" translatable="false">false</string>
 
     <!-- Settings -->
 

@@ -214,8 +214,8 @@ class Airodump{
             @Override
             public void run(){
                 if(menu!=null){
-                    menu.getItem(1).setIcon(R.drawable.stop_drawable);
-                    menu.getItem(1).setTitle(R.string.stop);
+                    menu.getItem(2).setIcon(R.drawable.stop_drawable);
+                    menu.getItem(2).setTitle(R.string.stop);
                 }
                 refreshState();
                 notification();
@@ -229,8 +229,8 @@ class Airodump{
             @Override
             public void run(){
                 if(menu!=null){
-                    menu.getItem(1).setIcon(R.drawable.start_drawable);
-                    menu.getItem(1).setTitle(R.string.start);
+                    menu.getItem(2).setIcon(R.drawable.start_drawable);
+                    menu.getItem(2).setTitle(R.string.start);
                 }
             }
         });

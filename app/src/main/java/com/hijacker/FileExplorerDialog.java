@@ -22,11 +22,14 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,10 +43,12 @@ import static com.hijacker.MainActivity.file_explorer_adapter;
 
 public class FileExplorerDialog extends DialogFragment{
     static final int SELECT_EXISTING_FILE=1, SELECT_DIR=2;
+    static SharedPreferences pref;
     static List<RootFile> list = new ArrayList<>();
     RootFile result = null;
     ListView listView;
     ImageButton backButton, newFolderButton;
+    RelativeLayout buttonsLayout;
     TextView currentDir;
     Runnable onSelect = null, onCancel = null;
     RootFile start = null, current = null;
@@ -53,8 +58,19 @@ public class FileExplorerDialog extends DialogFragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.file_explorer, null);
 
+        //WearOS
+        pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
+
         currentDir = view.findViewById(R.id.currentDir);
         backButton = view.findViewById(R.id.backButton);
+        buttonsLayout = view.findViewById(R.id.rl_1);
+
+        if (iswatch) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) buttonsLayout.getLayoutParams();
+            layoutParams.height = 50;
+            buttonsLayout.setLayoutParams(layoutParams);
+        }
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

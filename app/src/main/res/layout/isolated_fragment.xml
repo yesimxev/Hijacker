@@ -96,6 +96,7 @@
 
         <TextView
             android:text="@string/clients"
+            android:id="@+id/clients_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -118,23 +119,22 @@
         android:layout_height="wrap_content">
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/disconnect_all"
             android:id="@+id/deauth_all"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onDisconnect"/>
+            android:onClick="onDisconnect"
+            android:text="@string/disconnect_all" />
 
         <Button
+            android:id="@+id/crack"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/crack"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/crack"
             android:layout_weight="1"
-            android:onClick="onCrack"/>
+            android:onClick="onCrack"
+            android:text="@string/capture" />
 
         <Button
             style="?android:attr/buttonBarButtonStyle"

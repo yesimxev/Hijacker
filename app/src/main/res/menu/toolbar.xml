@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/back"
+        android:icon="@drawable/back"
+        android:title="@string/back"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/filter"
         android:icon="@drawable/filter_drawable"
         android:title="@string/filter"
@@ -11,7 +17,7 @@
         android:id="@+id/stop_run"
         android:icon="@drawable/start_drawable"
         android:title="@string/start"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/reset"

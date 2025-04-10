@@ -63,6 +63,7 @@ import static com.hijacker.MainActivity.progress;
 import static com.hijacker.MainActivity.runInHandler;
 import static com.hijacker.MainActivity.sort;
 import static com.hijacker.MainActivity.startAireplay;
+import static com.hijacker.MainActivity.startAireplayWear;
 import static com.hijacker.MainActivity.startAireplayWEP;
 import static com.hijacker.MainActivity.stop;
 import static com.hijacker.MainActivity.stopWPA;
@@ -70,6 +71,7 @@ import static com.hijacker.MainActivity.target_deauth;
 import static com.hijacker.MainActivity.toSort;
 import static com.hijacker.MainActivity.wpa_runnable;
 import static com.hijacker.MainActivity.wpa_thread;
+import static com.hijacker.MainActivity.pref;
 
 class AP extends Device{
     static final int WPA=0, WPA2=1, WEP=2, OPN=3, UNKNOWN=4;
@@ -193,6 +195,7 @@ class AP extends Device{
         stop(PROCESS_AIRODUMP);
         stop(PROCESS_AIREPLAY);
         adapter.notifyDataSetChanged();
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
         if(this.sec == WEP){
             //wep
             if(debug) Log.d("HIJACKER/AP", "Cracking WEP");
@@ -210,7 +213,8 @@ class AP extends Device{
             Airodump.setAP(this);
             Airodump.setForWPA(true);
             Airodump.start();
-            startAireplay(this.mac);
+            if (iswatch) startAireplayWear(this.mac);
+            else startAireplay(this.mac);
             wpa_thread = new Thread(wpa_runnable);
             wpa_thread.start();
         }

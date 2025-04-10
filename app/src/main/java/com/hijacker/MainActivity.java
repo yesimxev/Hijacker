@@ -67,6 +67,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity{
     static int aireplay_running = 0, currentFragment = FRAGMENT_AIRODUMP;         //Set currentFragment in onResume of each Fragment
     static String last_airodump = null, last_aireplay = null, last_mdk = null, last_reaver = null;
     //Filters
-    static boolean show_ap = true, show_st = true, show_na_st = true, wpa = true, wep = true, opn = true;
+    static boolean show_ap = true, show_st = true, show_na_st = true, wpa = true, wep = true, opn = true, deauthall = false;
     static boolean[] show_ch = {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
     static int pwr_filter = 120;
     static String manuf_filter = "";
@@ -164,7 +165,6 @@ public class MainActivity extends AppCompatActivity{
     static int deauthWait, band;
     static boolean show_notif, show_details, airOnStartup, debug, delete_extra, show_client_count,
             monstart, always_cap, cont_on_fail, watchdog, target_deauth, enable_on_airodump, update_on_startup;
-
     WatchdogTask watchdogTask;
 
     ReaverFragment reaverFragment = new ReaverFragment();
@@ -296,6 +296,16 @@ public class MainActivity extends AppCompatActivity{
             setSupportActionBar(toolbar);
             toolbar.setOverflowIcon(overflow[0]);
 
+            //WearOS optimisation
+            final Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
+
+            //Toolbar optimization for watch
+            if (iswatch) {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+                layoutParams.height = 80;
+                toolbar.setLayoutParams(layoutParams);
+            }
+
             ActionBar actionbar = getSupportActionBar();
             if(actionbar!=null){
                 actionbar.setDisplayHomeAsUpEnabled(true);
@@ -353,23 +363,6 @@ public class MainActivity extends AppCompatActivity{
             overflow[6] = getDrawable(R.drawable.overflow6);
             overflow[7] = getDrawable(R.drawable.overflow7);
             actionBar = getSupportActionBar();
-
-            //WearOS optimisation
-            Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
-            pref_edit.putBoolean("running_on_wearos", iswatch).apply();
-
-            if (iswatch) {
-                ap_count.setVisibility(View.GONE);
-                st_count.setVisibility(View.GONE);
-                ap_count_icon.setVisibility(View.GONE);
-                st_count_icon.setVisibility(View.GONE);
-                pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
-                pref_edit.putString("enable_monMode", "nexutil -m1");
-                pref_edit.putString("disable_monMode", "nexutil -m0;ifconfig wlan0 down && ifconfig wlan0 up");
-                pref_edit.putString("deauthWait", "45");
-                pref_edit.putBoolean("enable_on_airodump", true);
-                pref_edit.apply();
-            }
 
             //Load defaults
             publishProgress(getString(R.string.loading_defaults));
@@ -443,6 +436,25 @@ public class MainActivity extends AppCompatActivity{
                     }
                     old_dir.delete();
                 }
+            }
+
+            //WearOS optimization
+            final Boolean iswatch = pref.getBoolean("running_on_wearos", true);
+            if (iswatch) {
+                ap_count.setVisibility(View.GONE);
+                st_count.setVisibility(View.GONE);
+                ap_count_icon.setVisibility(View.GONE);
+                st_count_icon.setVisibility(View.GONE);
+                pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
+                pref_edit.putString("enable_monMode", "nexutil -m2");
+                pref_edit.putString("disable_monMode", "nexutil -m0; nexutil -s263 -l8 -b -v `printf \"mpc\\x00\\x01\\x00\\x00\\x00\" | base64 | tr -d '\\n'`");
+                pref_edit.putString("deauthWait", "3");
+                pref_edit.putBoolean("enable_on_airodump", true);
+                pref_edit.putBoolean("airOnStartup", true);
+                pref_edit.putBoolean("watchdog", false);
+                if (!pref.getBoolean("running_on_wearos", false)) Toast.makeText(getApplicationContext(), "First run done! Please restart app", Toast.LENGTH_SHORT).show();
+                pref_edit.putBoolean("running_on_wearos", true);
+                pref_edit.apply();
             }
 
             //Initialize notifications
@@ -722,7 +734,7 @@ public class MainActivity extends AppCompatActivity{
                     boolean handshake_captured = false;
                     final String capfile = Airodump.getCapFile();
                     Shell shell = getFreeShell();
-                    try{
+                     try{
                         if(capfile==null){
                             if(debug) Log.d("HIJACKER/wpa_thread", "cap file not found, airodump is probably not running...");
                         }else{
@@ -766,7 +778,7 @@ public class MainActivity extends AppCompatActivity{
                                 Button crack_btn = findViewById(R.id.crack);
                                 if(crack_btn!=null){
                                     //We are in IsolatedFragment
-                                    crack_btn.setText(getString(R.string.crack));
+                                    crack_btn.setText(getString(R.string.capture));
                                 }
 
                                 if(found){
@@ -909,6 +921,14 @@ public class MainActivity extends AppCompatActivity{
             File report = new File(Environment.getExternalStorageDirectory() + "/report.txt");
             if(report.exists()) report.delete();
 
+            //Prepare firmware for TicWatch Pro/Pro3
+            if (iswatch) {
+                publishProgress(getString(R.string.prep_watch));
+                Shell shell = getFreeShell();
+                String cmd = "su -c ifconfig wlan0 up; nexutil -s263 -l8 -b -v `printf \"mpc\\x00\\x00\\x00\\x00\\x00\" | base64 | tr -d '\\n'`";
+                shell.run(cmd);
+            }
+
             //Show FirstRunDialog
             if(customDialog!=null){
                 FirstRunDialog frDialog = new FirstRunDialog();
@@ -1022,6 +1042,16 @@ public class MainActivity extends AppCompatActivity{
         //Disconnect client client from ap target
         aireplay_running = AIREPLAY_DEAUTH;
         _startAireplay("--deauth 0 -a " + target + " -c " + client);
+    }
+    public static void startAireplayWear(String mac){
+        //Disconnect all clients from mac
+        aireplay_running = AIREPLAY_DEAUTH;
+        _startAireplay("--deauth 1 -a " + mac);
+    }
+    public static void startAireplayWear(String target, String client){
+        //Disconnect client client from ap target
+        aireplay_running = AIREPLAY_DEAUTH;
+        _startAireplay("--deauth 1 -a " + target + " -c " + client);
     }
     public static void startAireplayWEP(AP ap){
         //Increase IV generation from ap mac to crack a wep network
@@ -1292,6 +1322,11 @@ public class MainActivity extends AppCompatActivity{
                 new FiltersDialog().show(mFragmentManager, "FiltersDialog");
                 return true;
 
+            case R.id.back:
+                mFragmentManager.popBackStackImmediate();
+                menu.getItem(0).setVisible(false);
+                return true;
+
             case R.id.settings:
                 if(currentFragment!=FRAGMENT_SETTINGS){
                     FragmentTransaction ft = mFragmentManager.beginTransaction();
@@ -1412,11 +1447,14 @@ public class MainActivity extends AppCompatActivity{
         Boolean iswatch = pref.getBoolean("running_on_wearos", false);
         getMenuInflater().inflate(R.menu.toolbar, menu);
         if(airOnStartup){
-            menu.getItem(1).setIcon(R.drawable.stop_drawable);
-            menu.getItem(1).setTitle(R.string.stop);
+            menu.getItem(2).setIcon(R.drawable.stop_drawable);
+            menu.getItem(2).setTitle(R.string.stop);
         }
-        if (iswatch) menu.getItem(0).setVisible(false);
-        menu.getItem(3).setEnabled(false);
+        if (iswatch) {
+            menu.getItem(0).setVisible(false);
+            menu.getItem(1).setVisible(false);
+        }
+        menu.getItem(4).setEnabled(false);
         return true;
     }
     @Override
@@ -1666,8 +1704,18 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     void refreshDrawer(){
+        Boolean iswatch = pref.getBoolean("running_on_wearos", true);
         navigationView.getMenu().findItem(currentFragment).setChecked(true);
-        actionBar.setTitle(navTitlesMap.get(currentFragment));
+        if (iswatch) {
+            actionBar.setTitle("Menu");
+            toolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDrawerLayout.openDrawer(navigationView);
+                }
+            });
+        }
+        else actionBar.setTitle(navTitlesMap.get(currentFragment));
     }
     static String getManuf(String mac){
         mac = trimMac(mac);
