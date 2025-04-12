@@ -340,6 +340,7 @@
     <string name="band" translatable="false">1</string>
     <string name="show_client_count" translatable="false">true</string>
     <string name="running_on_wearos" translatable="false">false</string>
+    <string name="firstrun_wearos_done" translatable="false">false</string>
 
     <!-- Settings -->
 

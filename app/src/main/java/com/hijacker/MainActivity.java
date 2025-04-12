@@ -19,6 +19,7 @@ package com.hijacker;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.DownloadManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -39,6 +40,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
             enable_monMode, disable_monMode, custom_chroot_cmd;
     static int deauthWait, band;
     static boolean show_notif, show_details, airOnStartup, debug, delete_extra, show_client_count,
-            monstart, always_cap, cont_on_fail, watchdog, target_deauth, enable_on_airodump, update_on_startup;
+            monstart, always_cap, cont_on_fail, watchdog, target_deauth, enable_on_airodump, update_on_startup, iswatch;
     WatchdogTask watchdogTask;
 
     ReaverFragment reaverFragment = new ReaverFragment();
@@ -214,6 +216,10 @@ public class MainActivity extends AppCompatActivity{
         protected void onPreExecute(){
             pref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             pref_edit = pref.edit();
+
+            if (iswatch) {
+                if (!pref.getBoolean("firstrun_wearos_done", false)) Toast.makeText(MainActivity.this, "Initializing for WearOS. App will restart after setup...", Toast.LENGTH_LONG).show();
+            }
 
             errorDialog = new ErrorDialog();
             loadingDialog = new LoadingDialog();
@@ -297,7 +303,7 @@ public class MainActivity extends AppCompatActivity{
             toolbar.setOverflowIcon(overflow[0]);
 
             //WearOS optimisation
-            final Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
+            iswatch = pref.getBoolean("running_on_wearos", false);
 
             //Toolbar optimization for watch
             if (iswatch) {
@@ -439,22 +445,15 @@ public class MainActivity extends AppCompatActivity{
             }
 
             //WearOS optimization
-            final Boolean iswatch = pref.getBoolean("running_on_wearos", true);
+            iswatch = pref.getBoolean("running_on_wearos", false);
+            Toast.makeText(getApplicationContext(), "Watch: " + iswatch, Toast.LENGTH_LONG).show();
+
+            //Boolean iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
             if (iswatch) {
                 ap_count.setVisibility(View.GONE);
                 st_count.setVisibility(View.GONE);
                 ap_count_icon.setVisibility(View.GONE);
                 st_count_icon.setVisibility(View.GONE);
-                pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
-                pref_edit.putString("enable_monMode", "nexutil -m2");
-                pref_edit.putString("disable_monMode", "nexutil -m0; nexutil -s263 -l8 -b -v `printf \"mpc\\x00\\x01\\x00\\x00\\x00\" | base64 | tr -d '\\n'`");
-                pref_edit.putString("deauthWait", "3");
-                pref_edit.putBoolean("enable_on_airodump", true);
-                pref_edit.putBoolean("airOnStartup", true);
-                pref_edit.putBoolean("watchdog", false);
-                if (!pref.getBoolean("running_on_wearos", false)) Toast.makeText(getApplicationContext(), "First run done! Please restart app", Toast.LENGTH_SHORT).show();
-                pref_edit.putBoolean("running_on_wearos", true);
-                pref_edit.apply();
             }
 
             //Initialize notifications
@@ -921,11 +920,27 @@ public class MainActivity extends AppCompatActivity{
             File report = new File(Environment.getExternalStorageDirectory() + "/report.txt");
             if(report.exists()) report.delete();
 
-            //Prepare firmware for TicWatch Pro/Pro3
+            //WearOS
+            iswatch = getBaseContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
+            pref_edit.putBoolean("running_on_wearos", iswatch);
+            pref_edit.apply();
+
+            if (iswatch) {
+                pref_edit.putString("prefix", "LD_PRELOAD=/system/lib/libfakeioctl.so");
+                pref_edit.putString("enable_monMode", "nexutil -m2");
+                pref_edit.putString("disable_monMode", "nexutil -m0; nexutil -s263 -l8 -b -v `printf 'mpc\\x00\\x01\\x00\\x00\\x00' | base64 | tr -d '\\n'`");
+                pref_edit.putString("deauthWait", "3");
+                pref_edit.putBoolean("enable_on_airodump", true);
+                pref_edit.putBoolean("airOnStartup", true);
+                pref_edit.putBoolean("watchdog", false);
+                pref_edit.apply();
+            }
+
+            //Prepare firmware for WearOS
             if (iswatch) {
                 publishProgress(getString(R.string.prep_watch));
                 Shell shell = getFreeShell();
-                String cmd = "su -c ifconfig wlan0 up; nexutil -s263 -l8 -b -v `printf \"mpc\\x00\\x00\\x00\\x00\\x00\" | base64 | tr -d '\\n'`";
+                String cmd = "su -c ifconfig wlan0 up; nexutil -s263 -l8 -b -v `printf 'mpc\\x00\\x00\\x00\\x00\\x00' | base64 | tr -d '\\n'";
                 shell.run(cmd);
             }
 
@@ -959,6 +974,27 @@ public class MainActivity extends AppCompatActivity{
                 System.exit(1);
             }
             loadingDialog.setText(getString(R.string.starting_hijacker));
+
+            if (iswatch) {
+                if (!pref.getBoolean("firstrun_wearos_done", false)) {
+                    pref_edit.putBoolean("firstrun_wearos_done", true);
+                    pref_edit.apply();
+                    Toast.makeText(MainActivity.this, "WearOS init completed. Restarting...", Toast.LENGTH_LONG).show();
+                    new CountDownTimer(3000, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            Toast.makeText(MainActivity.this, "WearOS Init DONE. Restarting...", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            doRestart(getApplicationContext(),null);
+                        }
+
+                    }.start();
+                }
+            }
 
             if(watchdog){
                 watchdogTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -1444,16 +1480,16 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MainActivity.menu = menu;
-        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
+        iswatch = pref.getBoolean("running_on_wearos", false);
         getMenuInflater().inflate(R.menu.toolbar, menu);
         if(airOnStartup){
             menu.getItem(2).setIcon(R.drawable.stop_drawable);
             menu.getItem(2).setTitle(R.string.stop);
         }
         if (iswatch) {
-            menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
         }
+        menu.getItem(0).setVisible(false);
         menu.getItem(4).setEnabled(false);
         return true;
     }
@@ -1704,7 +1740,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     void refreshDrawer(){
-        Boolean iswatch = pref.getBoolean("running_on_wearos", true);
+        iswatch = pref.getBoolean("running_on_wearos", false);
         navigationView.getMenu().findItem(currentFragment).setChecked(true);
         if (iswatch) {
             actionBar.setTitle("Menu");
@@ -2031,5 +2067,14 @@ public class MainActivity extends AppCompatActivity{
 
     static{
         System.loadLibrary("native-lib");
+    }
+
+    public static void doRestart(Context context, Intent nextIntent) {
+        Intent mStartActivity = new Intent(context, MainActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
 }

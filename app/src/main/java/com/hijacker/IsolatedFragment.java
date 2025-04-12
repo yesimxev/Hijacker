@@ -93,7 +93,7 @@ public class IsolatedFragment extends Fragment{
 
         //WearOS
         pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        Boolean iswatch = pref.getBoolean("running_on_wearos", true);
+        Boolean iswatch = pref.getBoolean("running_on_wearos", false);
         ap_details = fragmentView.findViewById(R.id.ap_details);
         ap_details2 = fragmentView.findViewById(R.id.ap_details2);
         clients = fragmentView.findViewById(R.id.clients_title);
