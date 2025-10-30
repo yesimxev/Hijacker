@@ -112,6 +112,10 @@ The app gives you the option to install the Nexmon firmware on your device. Even
 
 ## Donate
 
-If you like my work, you can buy me a beer. :)
+If you like my work, you can buy me [chrisk44](https://github.com/chrisk44) a beer. :)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VV5TEHL8S6UQ2)
+
+If you like the v1.7 update gor arm64 and/or the smartwatch port, you can also buy me [yesimxev](https://github.com/yesimxev) a coffee. :)
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/yesimxev)
